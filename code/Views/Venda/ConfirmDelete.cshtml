@@ -1,0 +1,14 @@
+﻿@model VendaModel
+
+@{
+    ViewData["Title"] = "Confirmar Exclusão de Venda";
+}
+
+<div class="text-center">
+    <h3 class="text-white">Realmente deseja deletar a venda do cliente @Model.Cliente.NmCliente com o produto @Model.Produto.DscProduto ?</h3>
+
+    <div class="d-md-flex flex-column mt-4 gap-2">
+        <a class="btn btn-primary btn-block" role="button" asp-controller="Venda" asp-action="Index">Cancelar</a>
+        <a class="btn btn-danger btn-block" role="button" asp-action="Delete" asp-route-id="@Model.IdVenda">Confirmar</a>
+    </div>
+</div>

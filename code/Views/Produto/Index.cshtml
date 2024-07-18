@@ -1,0 +1,57 @@
+﻿@model List<ProdutoModel>
+@{
+    ViewData["Title"] = "Listagem de Produtos";
+}
+
+<main class="text-center text-light">
+    <div class="d-md-flex justify-content-between mb-4">
+        <a class="btn btn-primary" role="button" asp-controller="Produto" asp-action="Create">Adicionar novo produto</a>
+    </div>
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success  mb-2" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">X</button>
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @TempData["MensagemErro"]
+        </div>
+    }
+
+
+    <h1 class="text-white">Listagem de produtos</h1>
+    <table id="table-format" class="table text-white-50">
+        <thead>
+            <tr class="text-white">
+                <th scope="col">#</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Valor Unitário</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (ProdutoModel produto in Model)
+                {
+                    <tr>
+                        <th scope="row">@produto.IdProduto</th>
+                        <td>@produto.DscProduto</td>
+                        <td>@produto.VlrUnitario</td>
+                        <td>
+                            <div class="btn-group gap-2" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-id="@produto.IdProduto" asp-controller="Produto" asp-action="Edit">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-id="@produto.IdProduto" asp-controller="Produto" asp-action="ConfirmDelete">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</main>
