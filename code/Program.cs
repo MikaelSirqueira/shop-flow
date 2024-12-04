@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<LojaDbContext>(options =>
@@ -14,21 +13,29 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IVendaRepository, VendaRepository>();
 
+builder.Services.AddHttpClient<ClienteService>();
+builder.Services.AddHttpClient<ProdutoService>();
+builder.Services.AddHttpClient<VendaService>();
+
+builder.Services.AddTransient<DataSeeder>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<LojaDbContext>();
+    var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+
     context.Database.EnsureCreated();
+    await dataSeeder.SeedAsync();
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();

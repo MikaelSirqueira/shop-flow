@@ -1,9 +1,6 @@
 ﻿using code.Data;
 using code.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace code.Repository
 {
@@ -46,8 +43,8 @@ namespace code.Repository
                 throw new ArgumentNullException(nameof(venda));
             };
 
-            //venda.Produto = _context.Produtos.Where(x => x.IdProduto == venda.IdProduto).FirstOrDefault()!;
-            //venda.Cliente = _context.Clientes.Where(x => x.IdCliente == venda.IdCliente).FirstOrDefault()!;
+            venda.Produto = _context.Produtos.Where(x => x.IdProduto == venda.IdProduto).FirstOrDefault()!;
+            venda.Cliente = _context.Clientes.Where(x => x.IdCliente == venda.IdCliente).FirstOrDefault()!;
 
             _context.Vendas.Add(venda);
             _context.SaveChanges();
@@ -65,7 +62,9 @@ namespace code.Repository
             vendaModel.IdProduto = venda.IdProduto;
             vendaModel.QtdVenda = venda.QtdVenda;
             vendaModel.VlrUnitarioVenda = venda.VlrUnitarioVenda;
-            vendaModel.DthVenda = venda.DthVenda;            
+            vendaModel.DthVenda = venda.DthVenda;
+            vendaModel.Produto = _context.Produtos.Where(x => x.IdProduto == venda.IdProduto).FirstOrDefault()!;
+            vendaModel.Cliente = _context.Clientes.Where(x => x.IdCliente == venda.IdCliente).FirstOrDefault()!;
 
             _context.Vendas.Update(vendaModel);
             _context.SaveChanges();

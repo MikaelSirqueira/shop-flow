@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
 using code.Models;
 using code.Repository;
 
@@ -43,11 +41,7 @@ public class VendaController : Controller
         {                         
             _vendaRepository.Post(venda);
             TempData["MensagemSucesso"] = "Venda cadastrada com sucesso";
-            return RedirectToAction("Index");            
-
-            //ViewBag.Clientes = _clienteRepository.GetAll();
-            //ViewBag.Produtos = _produtoRepository.GetAll();
-            //return View(venda);
+            return RedirectToAction("Index");
         }
         catch (Exception e)
         {
@@ -68,17 +62,22 @@ public class VendaController : Controller
     public IActionResult SaveEdit(VendaModel venda)
     {
         try
-        {
-            if (ModelState.IsValid)
-            {                
-                _vendaRepository.Update(venda);
-                TempData["MensagemSucesso"] = "Venda alterada com sucesso";
-                return RedirectToAction("Index");
-            }
+        {               
+            _vendaRepository.Update(venda);
+            TempData["MensagemSucesso"] = "Venda alterada com sucesso";
 
-            ViewBag.Clientes = _clienteRepository.GetAll();
-            ViewBag.Produtos = _produtoRepository.GetAll();
-            return View("Edit", venda);
+            var objCliente = _clienteRepository.GetAll();
+            var objProduto = _produtoRepository.GetAll();
+
+            venda.Cliente = objCliente.FirstOrDefault(x => x.IdCliente != null & x.IdCliente == venda.IdCliente);
+            venda.Produto = objProduto.FirstOrDefault(x => x.IdProduto != null & x.IdProduto == venda.IdProduto);
+
+            ViewBag.Clientes = objCliente;
+            ViewBag.Produtos = objProduto;
+            View("Edit", venda);
+            return RedirectToAction("Index");
+
+            //return View("Edit", venda);
         }
         catch (Exception e)
         {
